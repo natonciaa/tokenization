@@ -1,25 +1,27 @@
 server:
   port: 8080
-
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/token_db
-    username: token_user
-    password: token_pass
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password:
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-
+  mail:
+    host: localhost
+    port: 1025
+    username: ''
+    password: ''
 app:
   security:
-    api-key: 123456-secret-key   # Cambia en producción: secreto en vault/env
+    api-key: 123456-secret-key
   tokenization:
-    reject-probability: 0.10 # 10% de rechazo
+    reject-probability: 0.10
   payment:
-    approval-probability: 0.75 # 75% prob de aprobar pago
+    approval-probability: 0.75
     retry-count: 3
   product:
     min-stock-display: 1
-
 

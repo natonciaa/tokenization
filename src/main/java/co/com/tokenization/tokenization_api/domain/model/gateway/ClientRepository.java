@@ -4,7 +4,7 @@ import co.com.tokenization.tokenization_api.domain.model.Client;
 
 import java.util.Optional;
 
-public interface ClienteRepository {
+public interface ClientRepository {
     Client save(Client client);
     Optional<Client> findByEmail(String email);
     Optional<Client> findByPhone(String phone);
