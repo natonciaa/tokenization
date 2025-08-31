@@ -2,6 +2,7 @@ package co.com.tokenization.tokenization_api.domain.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -11,13 +12,13 @@ import lombok.*;
 public class Client {
 
     private Long id;
-    @NotBlank
+    @NotNull(message = "Name cant be null" )
     private String name;
     @Email(message = "Invalid email")
     private String email;
-    @NotBlank
+    @NotNull(message = "Phone cant be null" )
     private String phone;
-    @NotBlank
+    @NotNull(message = "Address cant be null" )
     private String address;
 
 }
