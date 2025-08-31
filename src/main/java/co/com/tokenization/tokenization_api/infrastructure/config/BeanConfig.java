@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @ComponentScan(basePackages = "co.com.tokenization.tokenization_api.application.usecase",
         includeFilters = {
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.FilterType;
         },
         useDefaultFilters = false)
 @Configuration
+@EnableAsync
 public class BeanConfig {
 
     @Bean

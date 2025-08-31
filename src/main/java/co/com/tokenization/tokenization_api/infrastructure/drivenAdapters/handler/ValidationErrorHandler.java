@@ -22,6 +22,5 @@ public class ValidationErrorHandler {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.toList());
         return new ResponseEntity<>(new ErrorResponse("Error de validación", errors), HttpStatus.BAD_REQUEST);
-//        return ResponseEntity.badRequest().body(ex.getMessage().);
     }
 }
