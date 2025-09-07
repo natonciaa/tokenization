@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductSearchLog {
-    private UUID id;
+    private Long id;
     private String productName;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 }

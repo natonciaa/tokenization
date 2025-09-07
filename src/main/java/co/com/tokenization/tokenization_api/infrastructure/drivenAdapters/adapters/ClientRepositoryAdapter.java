@@ -30,8 +30,16 @@ public class ClientRepositoryAdapter implements ClientRepository {
     }
 
     @Override
-    public Optional<Client> findByEmail(String email) {
-        return spring.findByEmail(email).map(e -> new Client(e.getId(), e.getName(), e.getEmail(), e.getPhone(), e.getAddress()));
+    public Client findByEmail(String email) {
+
+        ClientEntity e = spring.findByEmail(email);
+        if(e == null)
+        {
+            return null;
+        }
+
+        return new Client(e.getId(), e.getName(), e.getEmail(), e.getPhone(), e.getAddress());
+
     }
 
     @Override

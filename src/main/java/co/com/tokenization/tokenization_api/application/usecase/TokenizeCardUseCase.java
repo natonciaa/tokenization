@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -36,7 +37,7 @@ public class TokenizeCardUseCase {
         String encrypted = crypto.encrypt(card.getNumber() + "|" + card.getCvv() + "|" + card.getExpiry());
         String token = UUID.randomUUID().toString();
 
-        TokenRecord rec = new TokenRecord(UUID.randomUUID(), token, encrypted, Instant.now());
+        TokenRecord rec = new TokenRecord(null, token, encrypted, LocalDateTime.now());
         return repo.save(rec);
     }
 }

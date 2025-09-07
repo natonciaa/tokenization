@@ -7,23 +7,20 @@ import co.com.tokenization.tokenization_api.infrastructure.drivenAdapters.jpa.re
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.UUID;
-
-@Component
 @AllArgsConstructor
+@Component
 public class ProductSearchLogRepositoryAdapter implements ProductSearchLogRepository {
 
-    private final ProductSearchLogJPARepository springRepo;
+    private final ProductSearchLogJPARepository jpaRepo;
 
     @Override
-    public ProductSearchLog save(ProductSearchLog log) {
-        ProductSearchLogEntity e = new ProductSearchLogEntity();
-        e.setId(log.getId() == null ? UUID.randomUUID() : log.getId());
-        e.setProductName(log.getProductName());
-        e.setCreatedAt(log.getCreatedAt() == null ? Instant.now() : log.getCreatedAt());
-        ProductSearchLogEntity saved = springRepo.save(e);
-        return new ProductSearchLog(saved.getId(), saved.getProductName(), saved.getCreatedAt());
+    public void save(ProductSearchLog log) {
+        ProductSearchLogEntity entity = new ProductSearchLogEntity(
+                log.getId(),
+                log.getProductName(),
+                log.getCreatedAt()
+        );
+        jpaRepo.save(entity);
     }
 }
 

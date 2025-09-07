@@ -2,9 +2,10 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/test
-    username: root
-    password:
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/test}
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,8 +21,16 @@ app:
   tokenization:
     reject-probability: 0.10
   payment:
-    approval-probability: 0.75
-    retry-count: 3
+    success-probability: 0.7
+    max-retries: 3
   product:
     min-stock-display: 1
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health # Expone solo el endpoint de salud
+  endpoint:
+    health:
+      show-details: always # Muestra los detalles de los health indicators
 

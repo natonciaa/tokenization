@@ -1,11 +1,10 @@
 package co.com.tokenization.tokenization_api.domain.model.gateway;
 
-
+import co.com.tokenization.tokenization_api.domain.model.Order;
 import co.com.tokenization.tokenization_api.infrastructure.drivenAdapters.jpa.entity.OrderEntity;
-
-import java.util.Optional;
+import org.hibernate.grammars.ordering.OrderingParser;
 
 public interface OrderRepository {
-    OrderEntity save(OrderEntity order);
-    Optional<OrderEntity> findById(Long id);
+    Order save(Order order);
+    Order findById(Long id);
 }

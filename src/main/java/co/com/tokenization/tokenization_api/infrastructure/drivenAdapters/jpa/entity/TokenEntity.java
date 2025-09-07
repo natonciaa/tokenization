@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -11,10 +12,9 @@ import java.util.UUID;
 @Data
 public class TokenEntity {
     @Id
-    @Column(columnDefinition = "uuid")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String token;
-    @Lob
     private String encryptedCard;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 }

@@ -7,12 +7,18 @@ import lombok.Data;
 @Table(name = "clients")
 @Data
 public class ClientEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     @Column(unique = true)
     private String email;
+
     @Column(unique = true)
     private String phone;
+
     private String address;
 }
+

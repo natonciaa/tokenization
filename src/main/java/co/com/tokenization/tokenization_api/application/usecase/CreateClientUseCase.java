@@ -8,11 +8,16 @@ import org.springframework.stereotype.Service;
 public class CreateClientUseCase {
     private final ClientRepository repo;
 
-    public CreateClientUseCase(ClientRepository repo) { this.repo = repo; }
+    public CreateClientUseCase(ClientRepository repo) {
+        this.repo = repo;
+    }
 
     public Client save(Client client) {
-        repo.findByEmail(client.getEmail()).ifPresent(c -> { throw new IllegalArgumentException("Email exists"); });
-        repo.findByPhone(client.getPhone()).ifPresent(c -> { throw new IllegalArgumentException("Phone exists");});
+        if (repo.findByEmail(client.getEmail()) != null)
+            throw new IllegalArgumentException("Email exists");
+        repo.findByPhone(client.getPhone()).ifPresent(c -> {
+            throw new IllegalArgumentException("Phone exists");
+        });
         return repo.save(client);
     }
 }

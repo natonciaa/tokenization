@@ -22,7 +22,7 @@ public class ApiKeyFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.equals("/ping"); // ping público
+        return path.equals("/ping") || path.equals("/actuator/health");
     }
 
     @Override

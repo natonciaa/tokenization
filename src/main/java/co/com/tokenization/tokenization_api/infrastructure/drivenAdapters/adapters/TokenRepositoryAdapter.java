@@ -4,9 +4,11 @@ import co.com.tokenization.tokenization_api.domain.model.TokenRecord;
 import co.com.tokenization.tokenization_api.domain.model.gateway.TokenRepository;
 import co.com.tokenization.tokenization_api.infrastructure.drivenAdapters.jpa.entity.TokenEntity;
 import co.com.tokenization.tokenization_api.infrastructure.drivenAdapters.jpa.repository.TokenJPARepository;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -22,10 +24,9 @@ public class TokenRepositoryAdapter implements TokenRepository {
     @Override
     public TokenRecord save(TokenRecord record) {
         TokenEntity e = new TokenEntity();
-        e.setId(record.getId() == null ? UUID.randomUUID() : record.getId());
         e.setToken(record.getToken());
         e.setEncryptedCard(record.getEncryptedCard());
-        e.setCreatedAt(record.getCreatedAt() == null ? Instant.now() : record.getCreatedAt());
+        e.setCreatedAt(record.getCreatedAt() == null ? LocalDateTime.now() : record.getCreatedAt());
         TokenEntity saved = tokenJPARepository.save(e);
         return new TokenRecord(saved.getId(), saved.getToken(), saved.getEncryptedCard(), saved.getCreatedAt());
     }

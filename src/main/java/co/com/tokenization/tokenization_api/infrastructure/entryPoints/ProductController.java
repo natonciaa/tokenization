@@ -15,6 +15,8 @@ public class ProductController {
 
     private final ProductUseCase useCase;
 
+
+
     @GetMapping
     public ResponseEntity<List<Product>> search(@RequestParam(required=false, defaultValue="") String productName) {
         return ResponseEntity.ok(useCase.search(productName));
