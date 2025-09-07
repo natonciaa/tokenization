@@ -1,5 +1,7 @@
 package co.com.tokenization.tokenization_api.infrastructure.entryPoints;
 
+import co.com.tokenization.tokenization_api.application.usecase.ProductUseCase;
+import co.com.tokenization.tokenization_api.domain.model.Product;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

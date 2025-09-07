@@ -1,5 +1,10 @@
 package co.com.tokenization.tokenization_api.infrastructure.entryPoints;
 
+import co.com.tokenization.tokenization_api.application.usecase.AddProductToCartUseCase;
+import co.com.tokenization.tokenization_api.application.usecase.CreateCartUseCase;
+import co.com.tokenization.tokenization_api.domain.model.Cart;
+import co.com.tokenization.tokenization_api.domain.model.CartItem;
+import co.com.tokenization.tokenization_api.domain.model.Product;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +43,7 @@ class CartControllerTest {
     void shouldAddProductToCart() {
         Cart cart = new Cart(1L, new ArrayList<>(), Cart.Status.PENDING,1000);
         Product p = new Product(1L, "Laptop", 5, 10);
-        CartItem item = new CartItem(p, 1);
+        CartItem item = new CartItem(1L,cart.getId(), p,1);
         List<CartItem> products = new ArrayList<>();
         products.add(item);
         cart.setItems(products);

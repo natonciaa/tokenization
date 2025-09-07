@@ -1,8 +1,11 @@
 package co.com.tokenization.tokenization_api.application.usecase;
 
+import co.com.tokenization.tokenization_api.domain.model.Cart;
 import co.com.tokenization.tokenization_api.domain.model.Client;
+import co.com.tokenization.tokenization_api.domain.model.Order;
 import co.com.tokenization.tokenization_api.domain.model.TokenRecord;
 import co.com.tokenization.tokenization_api.domain.model.gateway.CartRepository;
+import co.com.tokenization.tokenization_api.domain.model.gateway.ClientRepository;
 import co.com.tokenization.tokenization_api.domain.model.gateway.OrderRepository;
 import co.com.tokenization.tokenization_api.domain.model.gateway.TokenRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +32,8 @@ class PaymentUseCaseTest {
     @Mock
     CartRepository cartRepo;
     @Mock
+    ClientRepository clientRepo;
+    @Mock
     EmailService mailSender;
 
     @InjectMocks
@@ -43,7 +48,7 @@ class PaymentUseCaseTest {
     void setup() {
         client = new Client(1L, "Alice", "alice@mail.com", "123", "Address");
         cart = new Cart(1L, new ArrayList<>(), Cart.Status.PENDING,1000);
-        order = new Order(1L, client, "tok123", "Some street", cart, true);
+        order = new Order(1L, client, cart,"tok123", "Some street", true);
         token = new TokenRecord(1L, "tok123", "****1111", LocalDateTime.now() );
     }
 
@@ -56,8 +61,10 @@ class PaymentUseCaseTest {
         when(orderRepo.findById(1L)).thenReturn(order);
         when(cartRepo.save(any())).thenReturn(cart);
         when(orderRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
+        when(cartRepo.findById(order.getCart().getId())).thenReturn(cart);
+        when(clientRepo.findByEmail(client.getEmail())).thenReturn(client);
 
-        Order result = useCase.processPayment(order);
+        Order result = useCase.processPayment(order.getId(),order.getClient(), order.getCreditCardToken(), order.getDeliveryAddress());
 
         assertTrue(result.isPaid());
         assertEquals(Cart.Status.PAID, result.getCart().getStatus());
@@ -66,28 +73,35 @@ class PaymentUseCaseTest {
 
     @Test
     void shouldFailIfTokenNotFound() {
+        when(orderRepo.findById(1L)).thenReturn(order);
+
         when(tokenRepo.findByToken("tok123")).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> useCase.processPayment(order));
+        assertThrows(IllegalArgumentException.class, () -> useCase.processPayment(order.getId(),order.getClient(), order.getCreditCardToken(), order.getDeliveryAddress()));
         verify(mailSender).sendSimpleMessage(eq("alice@mail.com"), contains("failed"), anyString());
     }
 
     @Test
     void shouldFailIfOrderNotFound() {
-        when(tokenRepo.findByToken("tok123")).thenReturn(token);
+//        when(tokenRepo.findByToken("tok123")).thenReturn(token);
         when(orderRepo.findById(1L)).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> useCase.processPayment(order));
+        assertThrows(IllegalArgumentException.class, () -> useCase.processPayment(order.getId(),order.getClient(), order.getCreditCardToken(), order.getDeliveryAddress()));
     }
 
     @Test
     void shouldFailAfterRetries() {
+        order = new Order(1L, client, cart,"tok123", "Some street", false);
+
         when(tokenRepo.findByToken("tok123")).thenReturn(token);
         when(orderRepo.findById(1L)).thenReturn(order);
         when(orderRepo.save(any())).thenReturn(order);
-        order = new Order(1L, client, "tok123", "Some street", cart, false);
+        when(cartRepo.findById(order.getCart().getId())).thenReturn(cart);
+        when(cartRepo.save(any())).thenReturn(cart);
+        when(clientRepo.findByEmail(client.getEmail())).thenReturn(client);
+        order = new Order(1L, client, cart,"tok123", "Some street", true);
 
-        Order result = useCase.processPayment(order);
+        Order result = useCase.processPayment(order.getCart().getId(), order.getClient(), order.getCreditCardToken(), order.getDeliveryAddress());
 
         assertFalse(result.isPaid());
         assertEquals(Cart.Status.CANCELED, result.getCart().getStatus());

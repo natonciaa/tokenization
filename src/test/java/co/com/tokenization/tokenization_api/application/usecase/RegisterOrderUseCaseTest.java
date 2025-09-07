@@ -1,6 +1,8 @@
 package co.com.tokenization.tokenization_api.application.usecase;
 
+import co.com.tokenization.tokenization_api.domain.model.Cart;
 import co.com.tokenization.tokenization_api.domain.model.Client;
+import co.com.tokenization.tokenization_api.domain.model.Order;
 import co.com.tokenization.tokenization_api.domain.model.gateway.CartRepository;
 import co.com.tokenization.tokenization_api.domain.model.gateway.ClientRepository;
 import co.com.tokenization.tokenization_api.domain.model.gateway.OrderRepository;
@@ -47,8 +49,6 @@ class RegisterOrderUseCaseTest {
     @Test
     void shouldFailIfClientNotFound() {
         Client client = new Client(1L, "Alice", "alice@mail.com", "123", "Address");
-        when(clientRepo.findByEmail("alice@mail.com")).thenReturn(null);
-
         assertThrows(IllegalArgumentException.class,
                 () -> useCase.register(1L, client, "tok123", "Delivery street"));
     }
@@ -56,7 +56,6 @@ class RegisterOrderUseCaseTest {
     @Test
     void shouldFailIfCartNotFound() {
         Client client = new Client(1L, "Alice", "alice@mail.com", "123", "Address");
-        when(clientRepo.findByEmail("alice@mail.com")).thenReturn(client);
         when(cartRepo.findById(1L)).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class,

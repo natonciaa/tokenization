@@ -26,7 +26,7 @@ public class RegisterOrderUseCase {
     public Order register(Long cartId, Client client, String cardToken, String deliveryAddress) {
         Cart cart = cartRepo.findById(cartId);
         if(cart == null)
-             new IllegalArgumentException("Cart not found");
+             throw new IllegalArgumentException("Cart not found");
         Client clientFound = clientRepo.findByEmail(client.getEmail());
         if (clientFound == null) {
             throw new IllegalArgumentException("Client not found");

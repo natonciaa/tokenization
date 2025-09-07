@@ -1,5 +1,6 @@
 package co.com.tokenization.tokenization_api.application.usecase;
 
+import co.com.tokenization.tokenization_api.domain.model.Cart;
 import co.com.tokenization.tokenization_api.domain.model.gateway.CartRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
