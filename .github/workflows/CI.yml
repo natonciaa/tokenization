@@ -28,7 +28,8 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.aws.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.aws.AWS_SECRET_ACCESS_KEY }}
+    
+
     - name: Login to Amazon ECR
       id: login-pf-aws-ecr
       uses: aws-actions/amazon-ecr-login@v1
