@@ -8,10 +8,9 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     environment: tokenization
-    
+
     steps:
     - uses: actions/checkout@v4
     
@@ -20,19 +19,24 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
+
     - name: Grant execute permissions for gradlew
       run: chmod +x gradlew
+
     - name: Build with Gradle Wrapper
       run: ./gradlew build
+
+    # 👇 Bloque temporal para confirmar secrets
     - name: Debug secrets
       run: |
-        echo "AWS_ACCESS_KEY_ID length: ${#secrets.AWS_ACCESS_KEY_ID}"
-        echo "AWS_SECRET_ACCESS_KEY length: ${#secrets.AWS_SECRET_ACCESS_KEY}"
-        echo "AWS_REGION: ${secrets.AWS_REGION}"
+        echo "AWS_ACCESS_KEY_ID length: ${#AWS_ACCESS_KEY_ID}"
+        echo "AWS_SECRET_ACCESS_KEY length: ${#AWS_SECRET_ACCESS_KEY}"
+        echo "AWS_REGION: ${AWS_REGION}"
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: ${{ secrets.AWS_REGION }}
+
     - name: Setup AWS ECR Details
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -43,6 +47,7 @@ jobs:
     - name: Login to Amazon ECR
       id: login-pf-aws-ecr
       uses: aws-actions/amazon-ecr-login@v1
+
     - name: Build and push the tagged docker image to Amazon ECR
       env:
         ECR_REGISTRY: ${{ steps.login-pf-aws-ecr.outputs.registry }}
@@ -51,4 +56,3 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        
