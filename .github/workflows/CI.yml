@@ -26,9 +26,9 @@ jobs:
       run: ./gradlew build
     - name: Debug secrets
       run: |
-        echo "AWS_ACCESS_KEY_ID length: ${#AWS_ACCESS_KEY_ID}"
-        echo "AWS_SECRET_ACCESS_KEY length: ${#AWS_SECRET_ACCESS_KEY}"
-        echo "AWS_REGION: ${AWS_REGION}"
+        echo "AWS_ACCESS_KEY_ID length: ${{secrets.AWS_ACCESS_KEY_ID}}"
+        echo "AWS_SECRET_ACCESS_KEY length: ${{secrets.AWS_SECRET_ACCESS_KEY}}"
+        echo "AWS_REGION: ${{secrets.AWS_REGION}}"
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
